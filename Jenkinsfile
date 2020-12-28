@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     imagefolder = "masterarbeithhz/microservices:"
     imagetag = "multiuserlogin${env.BUILD_ID}"
-    giturl = 'https://github.com/masterarbeithhz/BaseArchitecture_MultiUserLogin.git'
+    giturl = 'https://github.com/masterarbeithhz/TestRepo.git'
     PROJECT_ID = 'crafty-sound-297315'
     CLUSTER_NAME = 'cluster-2'
     LOCATION = 'us-central1-c'
