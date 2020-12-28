@@ -5,6 +5,10 @@ pipeline {
     imagefolder = "masterarbeithhz/microservices:"
     imagetag = "multiuserlogin${env.BUILD_ID}"
     giturl = 'https://github.com/masterarbeithhz/BaseArchitecture_MultiUserLogin.git'
+    PROJECT_ID = 'crafty-sound-297315'
+    CLUSTER_NAME = 'cluster-2'
+    LOCATION = 'us-central1-c'
+    CREDENTIALS_ID = 'crafty-sound-297315'
   }
   
   agent any
@@ -28,7 +32,7 @@ pipeline {
       stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                    echo docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                             myapp.push("${imagetag}")
                     }
                 }
@@ -46,13 +50,11 @@ pipeline {
         }
       }
     
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "kubmanifest.yaml", kubeconfigId: "mykubeconfig1")
+        stage('Deploy to GKE') {
+            steps{
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'kubmanifest.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            }
         }
-      }
-    }
 
   }
 
